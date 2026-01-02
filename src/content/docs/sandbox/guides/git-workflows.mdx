@@ -27,13 +27,20 @@ await sandbox.gitCheckout('https://github.com/user/repo', {
 });
 
 // Shallow clone (faster for large repos)
-await sandbox.gitCheckout('https://github.com/user/large-repo', {
-  depth: 1
+await sandbox.gitCheckout('https://github.com/torvalds/linux', {
+  depth: 1  // Only clone the latest commit
 });
 
 // Clone to specific directory
 await sandbox.gitCheckout('https://github.com/user/my-app', {
   targetDir: '/workspace/project'
+});
+
+// Combine options
+await sandbox.gitCheckout('https://github.com/facebook/react', {
+  branch: 'main',
+  depth: 10,
+  targetDir: '/workspace/react-src'
 });
 ```
 </TypeScriptExample>
@@ -103,7 +110,7 @@ await sandbox.exec('cd repo && git commit -m "Update README"');
 
 ## Best practices
 
-- **Use shallow clones** - Faster for large repos with `depth: 1`
+- **Use shallow clones** - For large repositories, use `depth: 1` to clone only the latest commit. This significantly reduces bandwidth and clone time. Use higher depth values (like `depth: 10`) when you need limited commit history.
 - **Store credentials securely** - Use environment variables for tokens
 - **Clean up** - Delete unused repositories to save space
 
